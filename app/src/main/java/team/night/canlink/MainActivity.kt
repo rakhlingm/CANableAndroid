@@ -268,8 +268,14 @@ class MainActivity : AppCompatActivity() {
         val permissionFilter = IntentFilter(ACTION_USB_PERMISSION)
         val detachFilter = IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED)
 
-        registerReceiver(usbPermissionReceiver, permissionFilter)
-        registerReceiver(usbDetachReceiver, detachFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ requires explicit export flag
+            registerReceiver(usbPermissionReceiver, permissionFilter, RECEIVER_NOT_EXPORTED)
+            registerReceiver(usbDetachReceiver, detachFilter, RECEIVER_EXPORTED)
+        } else {
+            registerReceiver(usbPermissionReceiver, permissionFilter)
+            registerReceiver(usbDetachReceiver, detachFilter)
+        }
     }
 
     private fun unregisterReceivers() {

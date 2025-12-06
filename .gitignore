@@ -77,3 +77,6 @@ lint/tmp/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Release builds
+app/release/

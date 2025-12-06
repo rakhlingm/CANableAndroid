@@ -176,19 +176,52 @@
 
     </LinearLayout>
 
+    <!-- Server Connection -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etServerUrl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Server URL"
+            android:text="http://48.209.25.181:8090"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:textColorHint="#666666"
+            android:background="@drawable/gauge_background"
+            android:padding="12dp"
+            android:inputType="textUri"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btnServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Server"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
     <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="12dp">
 
         <Button
             android:id="@+id/btnConnect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Connect"
+            android:text="Open"
             android:textAllCaps="false" />
 
         <Button

@@ -48,4 +48,7 @@ dependencies {
 
     // USB Serial library
     implementation("com.github.mik3y:usb-serial-for-android:3.7.0")
+
+    // SignalR client
+    implementation("com.microsoft.signalr:signalr:7.0.0")
 }

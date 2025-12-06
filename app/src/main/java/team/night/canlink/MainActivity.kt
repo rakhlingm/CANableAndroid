@@ -25,10 +25,13 @@ class MainActivity : AppCompatActivity() {
         private const val PREFS_NAME = "canlink_prefs"
         private const val PREF_USE_MILES = "use_miles"
         private const val PREF_USE_FAHRENHEIT = "use_fahrenheit"
+        private const val PREF_SERVER_URL = "server_url"
+        private const val DEFAULT_SERVER_URL = "http://48.209.25.181:8090"
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var canableManager: CANableManager
+    private lateinit var signalRManager: SignalRManager
 
     private var pollingTimer: Timer? = null
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -36,9 +39,11 @@ class MainActivity : AppCompatActivity() {
     // Unit preferences
     private var useMiles = false
     private var useFahrenheit = false
+    private var serverUrl = DEFAULT_SERVER_URL
 
     // Last received values (in metric)
     private var lastSpeedKmh: Int? = null
+    private var lastRpm: Int? = null
     private var lastTempC: Int? = null
 
     // USB permission receiver
@@ -71,8 +76,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         canableManager = CANableManager(this)
+        signalRManager = SignalRManager()
         loadPreferences()
         setupCANableCallbacks()
+        setupSignalRCallbacks()
         setupUI()
         registerReceivers()
 
@@ -95,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         stopPolling()
         canableManager.disconnect()
+        signalRManager.disconnect()
         unregisterReceivers()
     }
 
@@ -110,7 +118,9 @@ class MainActivity : AppCompatActivity() {
 
         canableManager.onRpmReceived = { rpm ->
             mainHandler.post {
+                lastRpm = rpm
                 binding.tvRpm.text = "$rpm"
+                sendDataToServer()
             }
         }
 
@@ -151,6 +161,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupSignalRCallbacks() {
+        signalRManager.onConnected = {
+            appendLog("SignalR: Connected to server")
+            binding.btnServer.text = "Stop"
+        }
+
+        signalRManager.onDisconnected = {
+            appendLog("SignalR: Disconnected from server")
+        }
+
+        signalRManager.onReconnecting = {
+            appendLog("SignalR: Reconnecting...")
+        }
+
+        signalRManager.onError = { error ->
+            appendLog("SignalR ERROR: $error")
+        }
+    }
+
+    private fun sendDataToServer() {
+        if (!signalRManager.isConnected()) return
+
+        val speed = lastSpeedKmh ?: return
+        val rpm = lastRpm ?: return
+        val temp = lastTempC ?: return
+
+        Thread {
+            signalRManager.sendVehicleData(
+                deviceId = Build.MODEL,
+                speed = speed,
+                speedUnit = if (useMiles) "mph" else "km/h",
+                rpm = rpm,
+                temperature = temp,
+                tempUnit = if (useFahrenheit) "F" else "C"
+            )
+        }.start()
+    }
+
+    private fun connectToServer() {
+        Thread {
+            signalRManager.connect(serverUrl)
+        }.start()
+    }
+
     private fun setupUI() {
         binding.btnConnect.setOnClickListener {
             if (canableManager.isConnected()) {
@@ -170,6 +224,21 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnClearLog.setOnClickListener {
             binding.tvLog.text = ""
+        }
+
+        // Server connection
+        binding.etServerUrl.setText(serverUrl)
+        binding.btnServer.setOnClickListener {
+            if (signalRManager.isConnected()) {
+                signalRManager.disconnect()
+                binding.btnServer.text = "Server"
+                appendLog("Disconnected from server")
+            } else {
+                serverUrl = binding.etServerUrl.text.toString()
+                savePreferences()
+                connectToServer()
+                binding.btnServer.text = "Stop"
+            }
         }
 
         // Toggle speed units (km/h <-> mph)
@@ -318,6 +387,7 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         useMiles = prefs.getBoolean(PREF_USE_MILES, false)
         useFahrenheit = prefs.getBoolean(PREF_USE_FAHRENHEIT, false)
+        serverUrl = prefs.getString(PREF_SERVER_URL, DEFAULT_SERVER_URL) ?: DEFAULT_SERVER_URL
     }
 
     private fun savePreferences() {
@@ -325,6 +395,7 @@ class MainActivity : AppCompatActivity() {
             .edit()
             .putBoolean(PREF_USE_MILES, useMiles)
             .putBoolean(PREF_USE_FAHRENHEIT, useFahrenheit)
+            .putString(PREF_SERVER_URL, serverUrl)
             .apply()
     }
 }

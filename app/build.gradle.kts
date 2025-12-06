@@ -10,9 +10,10 @@ android {
     defaultConfig {
         applicationId = "team.night.canlink"
         minSdk = 26
+        //noinspection EditedTargetSdkVersion
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.2"
     }
 
     buildTypes {

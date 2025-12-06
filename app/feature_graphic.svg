@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#0d0d0d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#bg)"/>
+
+  <!-- Speedometer (left side) -->
+  <g transform="translate(200, 250)">
+    <!-- Arc background -->
+    <path d="M -120,0 A 120,120 0 1,1 120,0"
+          stroke="#333333" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <!-- Arc green -->
+    <path d="M -120,0 A 120,120 0 0,1 85,-85"
+          stroke="#00FF00" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <!-- Needle -->
+    <line x1="0" y1="0" x2="70" y2="-70" stroke="#00FF00" stroke-width="8" stroke-linecap="round"/>
+    <!-- Center -->
+    <circle cx="0" cy="0" r="15" fill="#00AA00"/>
+    <circle cx="0" cy="0" r="6" fill="#1A1A1A"/>
+    <!-- Speed value -->
+    <text x="0" y="60" font-family="Arial, sans-serif" font-size="48" font-weight="bold"
+          fill="#00FF00" text-anchor="middle">120</text>
+    <text x="0" y="90" font-family="Arial, sans-serif" font-size="18"
+          fill="#888888" text-anchor="middle">km/h</text>
+  </g>
+
+  <!-- App name (center-right) -->
+  <text x="580" y="220" font-family="Arial, sans-serif" font-size="72" font-weight="bold"
+        fill="#FFFFFF">CANLink</text>
+
+  <!-- Tagline -->
+  <text x="580" y="280" font-family="Arial, sans-serif" font-size="28"
+        fill="#888888">OBD-II Vehicle Diagnostics</text>
+
+  <!-- Features -->
+  <text x="580" y="340" font-family="Arial, sans-serif" font-size="20" fill="#00FF00">Speed</text>
+  <text x="700" y="340" font-family="Arial, sans-serif" font-size="20" fill="#FFAA00">RPM</text>
+  <text x="790" y="340" font-family="Arial, sans-serif" font-size="20" fill="#00AAFF">Temperature</text>
+
+  <!-- CAN bus line decoration -->
+  <line x1="580" y1="380" x2="920" y2="380" stroke="#333333" stroke-width="2"/>
+  <circle cx="600" cy="380" r="4" fill="#00FF00"/>
+  <circle cx="700" cy="380" r="4" fill="#00FF00"/>
+  <circle cx="800" cy="380" r="4" fill="#00FF00"/>
+  <circle cx="900" cy="380" r="4" fill="#00FF00"/>
+</svg>

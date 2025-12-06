@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CANable V2.0 (STM32 CDC) -->
+    <usb-device vendor-id="1155" product-id="22336" />
+
+    <!-- CANable V1.0 -->
+    <usb-device vendor-id="1155" product-id="14155" />
+
+    <!-- Generic CDC ACM devices -->
+    <usb-device vendor-id="1155" />
+</resources>

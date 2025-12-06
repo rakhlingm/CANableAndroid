@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "team.night.canlink.app-mergeDebugResources-3:/layout/activity_main.xml",
+        "source": "team.night.canlink.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "C:\\src\\MTA\\ManualDependencyInjection\\gradle\\wrapper\\daemon\\8.2\\team.night.canlink.app-mergeDebugResources-3:\\layout\\activity_main.xml",
+        "source": "C:\\src\\MTA\\ManualDependencyInjection\\gradle\\wrapper\\daemon\\8.2\\team.night.canlink.app-main-6:\\layout\\activity_main.xml"
+    }
+]
